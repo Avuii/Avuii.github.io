@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +30,8 @@
       border-radius: 20px;
       padding: 20px;
       margin-bottom: 20px;
-      margin-top: 20px; /* Zmiana wartości na 10px */
+      margin-top: 20px;
+      /* Zmiana wartości na 10px */
     }
 
     .button-frame {
@@ -102,6 +104,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="calculator-container">
     <h2>KALKULATOR</h2>
@@ -128,13 +131,13 @@
       <button onclick="appendToDisplay('/')">/</button>
       <br>
       <button onclick="appendSquareRoot()">√</button>
-      <button onclick="appendToDisplay('!')">!</button>
-      <button onclick"appendToDisplay('**')">^</button>
-      
+      <button onclick="obliczSilnie()">!</button>
+      <button onclick="appendToDisplay('**')">^</button>
+
     </div>
   </div>
 
-  <!-- Dodatkowe okienko do zmiany pozycji kalkulatora -->
+  <!-- Dodatkowe okienko do zmiany pozycji kalkulatora  -->
   <div class="position-options-container">
     <div class="position-options">
       <label class="position-label">Pozycja X:</label>
@@ -146,6 +149,10 @@
   </div>
 
   <script>
+    function evaluateExpression(expression) {
+      return Function('"use strict";return (' + expression + ')')();
+    }
+
     function appendToDisplay(value) {
       document.getElementById('display').value += value;
     }
@@ -164,14 +171,36 @@
       }
     }
 
-    function evaluateExpression(expression) {
-      return Function('"use strict";return (' + expression + ')')();
+    function obliczSilnie() {
+      wyrazenie = document.getElementById("display").value;
+      // Sprawdź poprawność wyrażenia jako nieujemnej liczby całkowitej
+      if (!/^\d+$/.test(wyrazenie)) {
+        throw new Error('Nieprawidłowe dane wejściowe. Proszę podać nieujemną liczbę całkowitą dla silni.');
+      }
+
+      // Konwertuj wyrażenie na liczbę
+      const num = parseInt(wyrazenie, 10);
+
+      // Sprawdź, czy liczba jest nieujemna
+      if (isNaN(num) || num < 0) {
+        throw new Error('Nieprawidłowe dane wejściowe. Proszę podać nieujemną liczbę całkowitą dla silni.');
+      }
+
+      // Oblicz silnię iteracyjnie
+      let wynik = 1;
+      for (let i = 2; i <= num; i++) {
+        wynik *= i;
+      }
+
+      // Zwróć wynik obliczeń silni
+      document.getElementById('display').value = wynik;
     }
 
+    //pierwiastek
     function appendSquareRoot() {
       var displayValue = document.getElementById('display').value;
       try {
-        var result = Math.sqrt(evaluateExpression(displayValue));
+        var result = Math.sqrt(displayValue);
         document.getElementById('display').value = result;
       } catch (error) {
         document.getElementById('display').value = 'Error';
@@ -188,4 +217,5 @@
     }
   </script>
 </body>
+
 </html>

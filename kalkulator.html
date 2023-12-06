@@ -5,16 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kalkulator</title>
   <style>
-    body {
+    body 
+    {
       text-align: center;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin: 50px;
-      margin: 0; 
-      padding: 0; 
       background-image: url('https://t4.ftcdn.net/jpg/05/34/01/49/360_F_534014991_VQDaRhHEJiqkGTVfq3Rd4Y0KsfBbcnLW.jpg'); /* Dodanie tła obrazu */
       background-size: cover; 
       background-position: center;
       background-repeat: no-repeat; 
       background-color: #dc86bf;
+    }
+    .calculator-container 
+    {
+      width: 400px;
+      height: 400px;
+      background-color:#dc86bf;
+      border: 5px solid #ccc;
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .container 
+    {
+      text-align: center;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      margin: 45px;
+      width: 300px;
+      height: 200px;
+      background-color:#dc86bf;
+      border: 2px solid #ccc;
+      border-radius: 20px;
+      padding: 5px;
     }
 
     h2 
@@ -22,6 +51,7 @@
      font-size: 30px;    
       color: #ff0080; 
       font-family:Tahoma, monospace; 
+      /*text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.8);*/
       }
       input 
       {
@@ -48,12 +78,12 @@
   </style>
 </head>
 <body>
-
+  <div class="calculator-container">
   <h2>KALKULATOR</h2>
   
   <input type="text" id="display" disabled>
   <br>
-
+  <div class="container">
   <button onclick="appendToDisplay('1')">1</button>
   <button onclick="appendToDisplay('2')">2</button>
   <button onclick="appendToDisplay('3')">3</button>
@@ -78,11 +108,16 @@
   <button onclick="appendToDisplay('/')">/</button>
   <br>
   <button onclick="appendSquareRoot()">√</button>
-  <button onclick="appendToDisplay('!')">!</button>
+  <button onclick="obliczSilnie()">!</button>
   <button onclick="appendToDisplay('**')">^</button>
   <br>
-
+  </div>
+</div>
   <script>
+    function evaluateExpression(expression) {
+      return Function('"use strict";return (' + expression + ')')();
+    }
+
     function appendToDisplay(value) {
       document.getElementById('display').value += value;
     }
@@ -101,18 +136,49 @@
       }
     }
 
-    function evaluateExpression(expression) {
-      return Function('"use strict";return (' + expression + ')')();
+    function obliczSilnie() {
+      wyrazenie = document.getElementById("display").value;
+      // Sprawdź poprawność wyrażenia jako nieujemnej liczby całkowitej
+      if (!/^\d+$/.test(wyrazenie)) {
+        throw new Error('Nieprawidłowe dane wejściowe. Proszę podać nieujemną liczbę całkowitą dla silni.');
+      }
+
+      // Konwertuj wyrażenie na liczbę
+      const num = parseInt(wyrazenie, 10);
+
+      // Sprawdź, czy liczba jest nieujemna
+      if (isNaN(num) || num < 0) {
+        throw new Error('Nieprawidłowe dane wejściowe. Proszę podać nieujemną liczbę całkowitą dla silni.');
+      }
+
+      // Oblicz silnię iteracyjnie
+      let wynik = 1;
+      for (let i = 2; i <= num; i++) {
+        wynik *= i;
+      }
+
+      // Zwróć wynik obliczeń silni
+      document.getElementById('display').value = wynik;
     }
 
+    //pierwiastek
     function appendSquareRoot() {
       var displayValue = document.getElementById('display').value;
       try {
-        var result = Math.sqrt(evaluateExpression(displayValue));
+        var result = Math.sqrt(displayValue);
         document.getElementById('display').value = result;
       } catch (error) {
         document.getElementById('display').value = 'Error';
       }
+    }
+
+    // Funkcja do ustawiania pozycji kalkulatora
+    function setPosition() {
+      var positionX = document.getElementById('positionX').value;
+      var positionY = document.getElementById('positionY').value;
+
+      document.querySelector('.calculator-container').style.left = positionX + 'px';
+      document.querySelector('.calculator-container').style.top = positionY + 'px';
     }
   </script>
 
