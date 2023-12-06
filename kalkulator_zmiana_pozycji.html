@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator</title>
+  <style>
+    body {
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-image: url('https://t4.ftcdn.net/jpg/05/34/01/49/360_F_534014991_VQDaRhHEJiqkGTVfq3Rd4Y0KsfBbcnLW.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #dc86bf;
+    }
+
+    .calculator-container {
+      position: relative;
+      width: 350px;
+      height: 375px;
+      background-color: #dc86bf;
+      border: 5px solid #ccc;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      margin-top: 20px; /* Zmiana wartości na 10px */
+    }
+
+    .button-frame {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    h2 {
+      font-size: 30px;
+      color: #ff0080;
+      font-family: Tahoma, monospace;
+    }
+
+    input {
+      width: 100%;
+      text-align: right;
+      font-size: 18px;
+      border: 3px solid #ff0080;
+      background-color: #e9add9;
+      border-radius: 5px;
+      color: #ff0080;
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 70px;
+      height: 40px;
+      margin: 5px;
+      background-color: #d158b0;
+      color: #f7e3f0;
+      border: 3px solid #ff0080;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* Dodatkowe okienko do zmiany pozycji kalkulatora */
+    .position-options-container {
+      width: 300px;
+      background-color: #dc86bf;
+      border: 5px solid #ccc;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .position-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .position-label {
+      color: #ff0080;
+    }
+
+    .position-input {
+      width: 50px;
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    .set-position-button {
+      width: 100%;
+      height: 30px;
+      background-color: #d158b0;
+      color: #f7e3f0;
+      border: 2px solid #ff0080;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator-container">
+    <h2>KALKULATOR</h2>
+    <input type="text" id="display" disabled>
+    <div class="button-frame">
+      <button onclick="appendToDisplay('1')">1</button>
+      <button onclick="appendToDisplay('2')">2</button>
+      <button onclick="appendToDisplay('3')">3</button>
+      <button onclick="appendToDisplay('+')">+</button>
+      <br>
+      <button onclick="appendToDisplay('4')">4</button>
+      <button onclick="appendToDisplay('5')">5</button>
+      <button onclick="appendToDisplay('6')">6</button>
+      <button onclick="appendToDisplay('-')">-</button>
+      <br>
+      <button onclick="appendToDisplay('7')">7</button>
+      <button onclick="appendToDisplay('8')">8</button>
+      <button onclick="appendToDisplay('9')">9</button>
+      <button onclick="appendToDisplay('*')">*</button>
+      <br>
+      <button onclick="appendToDisplay('0')">0</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="appendToDisplay('/')">/</button>
+      <br>
+      <button onclick="appendSquareRoot()">√</button>
+      <button onclick="appendToDisplay('!')">!</button>
+      <button onclick"appendToDisplay('**')">^</button>
+      
+    </div>
+  </div>
+
+  <!-- Dodatkowe okienko do zmiany pozycji kalkulatora -->
+  <div class="position-options-container">
+    <div class="position-options">
+      <label class="position-label">Pozycja X:</label>
+      <input class="position-input" type="number" id="positionX" placeholder="X">
+      <label class="position-label">Pozycja Y:</label>
+      <input class="position-input" type="number" id="positionY" placeholder="Y">
+      <button class="set-position-button" onclick="setPosition()">Ustaw pozycję</button>
+    </div>
+  </div>
+
+  <script>
+    function appendToDisplay(value) {
+      document.getElementById('display').value += value;
+    }
+
+    function clearDisplay() {
+      document.getElementById('display').value = '';
+    }
+
+    function calculate() {
+      var displayValue = document.getElementById('display').value;
+      try {
+        var result = evaluateExpression(displayValue);
+        document.getElementById('display').value = result;
+      } catch (error) {
+        document.getElementById('display').value = 'Error';
+      }
+    }
+
+    function evaluateExpression(expression) {
+      return Function('"use strict";return (' + expression + ')')();
+    }
+
+    function appendSquareRoot() {
+      var displayValue = document.getElementById('display').value;
+      try {
+        var result = Math.sqrt(evaluateExpression(displayValue));
+        document.getElementById('display').value = result;
+      } catch (error) {
+        document.getElementById('display').value = 'Error';
+      }
+    }
+
+    // Funkcja do ustawiania pozycji kalkulatora
+    function setPosition() {
+      var positionX = document.getElementById('positionX').value;
+      var positionY = document.getElementById('positionY').value;
+
+      document.querySelector('.calculator-container').style.left = positionX + 'px';
+      document.querySelector('.calculator-container').style.top = positionY + 'px';
+    }
+  </script>
+</body>
+</html>
